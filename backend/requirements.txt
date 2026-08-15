@@ -1,3 +1,9 @@
+# setuptools is no longer bundled by default in newer Python installs (e.g.
+# Render's Python 3.14 base image) — pkg_resources (from setuptools) is a
+# real, still-used import in razorpay's own client.py, so it must be listed
+# explicitly rather than relying on it happening to already be present.
+setuptools==80.10.2
+
 fastapi==0.141.1
 uvicorn[standard]==0.52.1
 sqlalchemy[asyncio]==2.0.52
