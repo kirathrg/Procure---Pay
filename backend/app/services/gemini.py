@@ -154,7 +154,21 @@ class GeminiService:
             response_format={"type": "json_object"},
             temperature=0.3,
         )
-        return json.loads(_strip_think_tags(response.choices[0].message.content))
+        data = json.loads(_strip_think_tags(response.choices[0].message.content))
+        # response_format only guarantees valid JSON syntax, not that the
+        # model actually included every key the schema asked for — seen in
+        # production: a response with no "reason" key crashed the whole
+        # invoice/receipt upload (KeyError) instead of just producing a
+        # blander narrative. A match case's numeric fields (Section 4/11's
+        # deterministic comparison) are correct either way; only the
+        # human-readable sentence is at risk here, so fail soft.
+        if "reason" not in data:
+            data["reason"] = (
+                f"PO {po_number}: fields matched within tolerance."
+                if auto_approved
+                else f"PO {po_number} has field discrepancies that need review."
+            )
+        return data
 
     async def generate_supplier_pick_reason(
         self, item: str, picked: dict[str, Any], candidates: list[dict[str, Any]]
