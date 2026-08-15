@@ -1,0 +1,45 @@
+fastapi==0.141.1
+uvicorn[standard]==0.52.1
+sqlalchemy[asyncio]==2.0.52
+asyncpg==0.31.0
+alembic==1.19.1
+pydantic==2.13.4
+pydantic-settings==2.15.0
+python-jose[cryptography]==3.5.0
+python-multipart==0.0.32
+httpx==0.28.1
+
+# Hosted LLM via Groq (chat + narrative generation only) — the app runs on a
+# server without a GPU, so inference has to be hosted rather than local; the
+# free tier comfortably covers this app's low, human-paced call volume.
+groq==1.6.0
+
+# Hosted OCR via OCR.space (invoice extraction) — swapped in from local
+# PaddleOCR/PaddlePaddle so the backend fits a free-tier host's RAM/disk
+# budget (PaddlePaddle alone was ~550MB); also measured faster end-to-end.
+requests==2.34.2
+
+# QR generation for dev-tools test data (receiving verification now decodes
+# client-side in the browser — see p2p-frontend/src/lib/qrScan.ts — so no
+# server-side decode library is needed; this is generation only).
+qrcode[pil]==8.0
+
+# Supabase storage client
+supabase==2.31.0
+
+# Fuzzy item-to-catalog matching (requisition routing, sourcing)
+rapidfuzz==3.14.5
+
+# PO PDF generation + emailing to suppliers
+reportlab==5.0.0
+resend==2.36.0
+
+# Payment approval (manager dashboard release-payment flow, Razorpay test mode)
+razorpay==1.4.2
+
+# Speech-to-text for the requisition chat's voice input (Deepgram Nova-3)
+deepgram-sdk==7.7.0
+
+# Dev / test
+pytest==8.3.4
+pytest-asyncio==0.25.0

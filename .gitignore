@@ -1,0 +1,5 @@
+# Claude Code local tooling/session state — not part of the application
+.claude/
+
+# Generated reports/deliverables — not application source
+*.pdf
