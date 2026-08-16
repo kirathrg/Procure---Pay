@@ -117,7 +117,7 @@ export default function Invoicing() {
 
   if (poLoading) {
     return (
-      <div className="mx-auto max-w-6xl px-6 py-6">
+      <div className="mx-auto max-w-6xl px-4 py-6 sm:px-6">
         <p className="text-[12px] text-text-faint">Loading…</p>
       </div>
     );
@@ -125,7 +125,7 @@ export default function Invoicing() {
 
   if (!activePO) {
     return (
-      <div className="mx-auto max-w-6xl px-6 py-6">
+      <div className="mx-auto max-w-6xl px-4 py-6 sm:px-6">
         <h2 className="font-heading text-[16px] font-medium tracking-tight text-text">Invoicing</h2>
         {openPOs.length === 0 ? (
           <p className="mt-2 text-[13px] text-text-faint">
@@ -165,17 +165,17 @@ export default function Invoicing() {
   }
 
   return (
-    <div className="mx-auto max-w-6xl px-6 py-6">
-      <div className="mb-5 flex items-center justify-between">
-        <div>
-          <h2 className="font-heading text-[16px] font-medium tracking-tight text-text">
+    <div className="mx-auto max-w-6xl px-4 py-6 sm:px-6">
+      <div className="mb-5 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+        <div className="min-w-0">
+          <h2 className="truncate font-heading text-[16px] font-medium tracking-tight text-text">
             {invoice?.invoiceNumber ?? `Invoicing · ${activePO.poNumber}`}
           </h2>
           <p className="mt-0.5 text-[12px] text-text-faint">
             {invoice ? `${invoice.vendor} · Ref ${invoice.poNumber}` : "Upload an invoice to extract fields"}
           </p>
         </div>
-        <div className="flex items-center gap-3">
+        <div className="flex flex-wrap items-center gap-3">
           <PoSwitcher
             openPOs={openPOs}
             activePoId={activePO.id}
@@ -208,13 +208,13 @@ export default function Invoicing() {
         </p>
       )}
 
-      <div className="grid grid-cols-2 gap-5">
+      <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
         {/* Document preview with bbox overlay */}
         <div className="surface-panel relative overflow-hidden rounded-lg border border-border bg-surface">
           <div className="border-b border-border px-4 py-2.5">
             <p className="text-[12px] text-text-faint">Source document</p>
           </div>
-          <div className="relative aspect-[3/4] overflow-hidden bg-overlay/[0.02] p-6">
+          <div className="relative aspect-[3/4] overflow-hidden bg-overlay/[0.02] p-4 sm:p-6">
             <div className="relative h-full w-full overflow-hidden rounded-sm border border-black/10 bg-[#fcfcfa] text-[#1a1a18] shadow-[0_1px_2px_rgba(0,0,0,0.4)]">
               {previewUrl ? (
                 <img src={previewUrl} alt="Uploaded invoice" className="h-full w-full object-cover" />
@@ -303,7 +303,7 @@ export default function Invoicing() {
                         className="absolute inset-y-0 left-0 w-[2px] bg-accent"
                       />
                     )}
-                    <span className="text-[12px] text-text-faint">{f.label}</span>
+                    <span className="shrink-0 text-[12px] text-text-faint">{f.label}</span>
                     <AnimatePresence mode="wait">
                       {isRevealed ? (
                         <motion.div
@@ -311,10 +311,10 @@ export default function Invoicing() {
                           initial={isResumed ? false : { opacity: 0, x: 6 }}
                           animate={{ opacity: 1, x: 0 }}
                           transition={{ duration: 0.2 }}
-                          className="flex items-center gap-2"
+                          className="ml-2 flex min-w-0 items-center gap-2"
                         >
-                          <span className="font-tabular text-[13px] font-medium text-text">{f.value}</span>
-                          <span className="font-tabular text-[10px] text-text-faint">
+                          <span className="truncate font-tabular text-[13px] font-medium text-text">{f.value}</span>
+                          <span className="shrink-0 font-tabular text-[10px] text-text-faint">
                             {Math.round(f.confidence * 100)}%
                           </span>
                         </motion.div>

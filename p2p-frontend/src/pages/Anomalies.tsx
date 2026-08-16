@@ -23,8 +23,8 @@ export default function Anomalies() {
   const highCount = anomalies.filter((a) => a.severity === "high").length;
 
   return (
-    <div className="mx-auto max-w-6xl px-6 py-6">
-      <div className="mb-4 flex items-center justify-between">
+    <div className="mx-auto max-w-6xl px-4 py-6 sm:px-6">
+      <div className="mb-4 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h2 className="font-heading text-[16px] font-medium tracking-tight text-text">Flagged activity</h2>
           <p className="mt-0.5 text-[12px] text-text-faint">
@@ -34,7 +34,7 @@ export default function Anomalies() {
         <button
           onClick={() => runDetection.mutate()}
           disabled={runDetection.isPending}
-          className="flex items-center gap-1.5 rounded-md border border-border px-2.5 py-1.5 text-[12px] text-text-dim transition-colors duration-150 ease-out hover:border-border-strong hover:text-text disabled:pointer-events-none disabled:opacity-50"
+          className="flex shrink-0 items-center gap-1.5 rounded-md border border-border px-2.5 py-1.5 text-[12px] text-text-dim transition-colors duration-150 ease-out hover:border-border-strong hover:text-text disabled:pointer-events-none disabled:opacity-50"
         >
           <RefreshCw className={cn("h-3.5 w-3.5", runDetection.isPending && "animate-spin")} strokeWidth={1.75} />
           {runDetection.isPending ? "Scanning…" : "Run detection"}
@@ -67,8 +67,8 @@ export default function Anomalies() {
                 )}
               />
 
-              <div className="relative flex items-start justify-between gap-4">
-                <div className="flex items-start gap-3">
+              <div className="relative flex flex-wrap items-start justify-between gap-3">
+                <div className="flex min-w-0 items-start gap-3">
                   <div
                     className={cn(
                       "mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-md border transition-colors duration-150 ease-out",
@@ -79,15 +79,17 @@ export default function Anomalies() {
                   >
                     <Icon className="h-3.5 w-3.5" strokeWidth={1.75} />
                   </div>
-                  <div>
+                  <div className="min-w-0">
                     <p className="text-[13px] font-medium text-text">{a.title}</p>
                     <p className="mt-0.5 max-w-xl text-[12.5px] leading-relaxed text-text-dim">{a.detail}</p>
                   </div>
                 </div>
-                <Badge tone={severityTone[a.severity]}>{a.severity}</Badge>
+                <Badge tone={severityTone[a.severity]} className="shrink-0">
+                  {a.severity}
+                </Badge>
               </div>
 
-              <div className="relative ml-10 mt-3 flex flex-wrap gap-2">
+              <div className="relative mt-3 flex flex-wrap gap-2 sm:ml-10">
                 {a.dataPoints.map((dp) => (
                   <span
                     key={dp}

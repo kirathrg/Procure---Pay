@@ -30,8 +30,8 @@ export default function Catalog() {
   });
 
   return (
-    <div className="mx-auto max-w-6xl px-6 py-6">
-      <div className="mb-4 flex items-center justify-between">
+    <div className="mx-auto max-w-6xl px-4 py-6 sm:px-6">
+      <div className="mb-4 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h2 className="font-heading text-[16px] font-medium tracking-tight text-text">Product catalog</h2>
           <p className="mt-0.5 text-[12px] text-text-faint">
@@ -45,13 +45,13 @@ export default function Catalog() {
       </div>
 
       <div className="mb-4 flex flex-wrap items-center gap-2">
-        <div className="flex items-center gap-1.5 rounded-md border border-border bg-overlay/[0.03] px-2.5 py-1.5">
+        <div className="flex w-full items-center gap-1.5 rounded-md border border-border bg-overlay/[0.03] px-2.5 py-1.5 sm:w-auto">
           <Search className="h-3.5 w-3.5 text-text-faint" strokeWidth={1.75} />
           <input
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Search by name or SKU…"
-            className="w-56 bg-transparent text-[12.5px] text-text placeholder:text-text-faint focus:outline-none"
+            className="w-full bg-transparent text-[12.5px] text-text placeholder:text-text-faint focus:outline-none sm:w-56"
           />
         </div>
         <button
@@ -81,7 +81,7 @@ export default function Catalog() {
         ))}
       </div>
 
-      <div className="grid grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {filtered.map((product, i) => {
           const isExpanded = expandedId === product.id;
           const eligible = isExpanded ? eligibleSuppliers : [];
@@ -94,7 +94,7 @@ export default function Catalog() {
               transition={{ duration: 0.3, delay: i * 0.04, ease: [0.16, 1, 0.3, 1] }}
               className={cn(
                 "surface-panel card-interactive col-span-1 overflow-hidden rounded-lg border border-border bg-surface",
-                isExpanded && "col-span-3",
+                isExpanded && "sm:col-span-2 lg:col-span-3",
               )}
             >
               <button
@@ -126,42 +126,44 @@ export default function Catalog() {
                     className="overflow-hidden border-t border-border"
                   >
                     <p className="px-4 pt-3 text-[11px] text-text-faint">{product.description}</p>
-                    <table className="mt-3 w-full text-left">
-                      <thead>
-                        <tr className="text-[11px] text-text-faint">
-                          <th className="px-4 py-2 font-normal">Supplier</th>
-                          <th className="px-4 py-2 text-right font-normal">Unit price</th>
-                          <th className="px-4 py-2 text-right font-normal">Lead time</th>
-                          <th className="px-4 py-2 text-right font-normal"></th>
-                        </tr>
-                      </thead>
-                      <tbody className="divide-y divide-border">
-                        {eligible.map((ps) => (
-                          <tr key={ps.supplierId} className="row-interactive text-[12.5px]">
-                            <td className="px-4 py-2.5 text-text">{ps.supplier.name}</td>
-                            <td className="px-4 py-2.5 text-right font-tabular text-text-dim">${ps.unitPrice}</td>
-                            <td className="px-4 py-2.5 text-right font-tabular text-text-dim">
-                              {ps.leadTimeDays}d
-                            </td>
-                            <td className="px-4 py-2.5 text-right">
-                              {ps.preferred && (
-                                <span className="inline-flex items-center gap-1 text-[10px] text-accent">
-                                  <Star className="h-3 w-3" strokeWidth={2} fill="currentColor" />
-                                  Preferred
-                                </span>
-                              )}
-                            </td>
+                    <div className="mt-3 overflow-x-auto">
+                      <table className="w-full min-w-[420px] text-left">
+                        <thead>
+                          <tr className="text-[11px] text-text-faint">
+                            <th className="px-4 py-2 font-normal">Supplier</th>
+                            <th className="px-4 py-2 text-right font-normal">Unit price</th>
+                            <th className="px-4 py-2 text-right font-normal">Lead time</th>
+                            <th className="px-4 py-2 text-right font-normal"></th>
                           </tr>
-                        ))}
-                        {eligible.length === 0 && (
-                          <tr>
-                            <td colSpan={4} className="px-4 py-3 text-[12px] text-text-faint">
-                              No suppliers assigned yet.
-                            </td>
-                          </tr>
-                        )}
-                      </tbody>
-                    </table>
+                        </thead>
+                        <tbody className="divide-y divide-border">
+                          {eligible.map((ps) => (
+                            <tr key={ps.supplierId} className="row-interactive text-[12.5px]">
+                              <td className="px-4 py-2.5 text-text">{ps.supplier.name}</td>
+                              <td className="px-4 py-2.5 text-right font-tabular text-text-dim">${ps.unitPrice}</td>
+                              <td className="px-4 py-2.5 text-right font-tabular text-text-dim">
+                                {ps.leadTimeDays}d
+                              </td>
+                              <td className="px-4 py-2.5 text-right">
+                                {ps.preferred && (
+                                  <span className="inline-flex items-center gap-1 text-[10px] text-accent">
+                                    <Star className="h-3 w-3" strokeWidth={2} fill="currentColor" />
+                                    Preferred
+                                  </span>
+                                )}
+                              </td>
+                            </tr>
+                          ))}
+                          {eligible.length === 0 && (
+                            <tr>
+                              <td colSpan={4} className="px-4 py-3 text-[12px] text-text-faint">
+                                No suppliers assigned yet.
+                              </td>
+                            </tr>
+                          )}
+                        </tbody>
+                      </table>
+                    </div>
                     <div className="h-3" />
                   </motion.div>
                 )}

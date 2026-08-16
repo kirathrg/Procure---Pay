@@ -159,7 +159,7 @@ export default function Receiving() {
 
   if (poLoading) {
     return (
-      <div className="mx-auto max-w-4xl px-6 py-6">
+      <div className="mx-auto max-w-4xl px-4 py-6 sm:px-6">
         <p className="text-[12px] text-text-faint">Loading…</p>
       </div>
     );
@@ -167,7 +167,7 @@ export default function Receiving() {
 
   if (!activePO) {
     return (
-      <div className="mx-auto max-w-4xl px-6 py-6">
+      <div className="mx-auto max-w-4xl px-4 py-6 sm:px-6">
         <h2 className="font-heading text-[16px] font-medium tracking-tight text-text">Goods receipt</h2>
         {openPOs.length === 0 ? (
           <p className="mt-2 text-[13px] text-text-faint">
@@ -205,15 +205,15 @@ export default function Receiving() {
   }
 
   return (
-    <div className="mx-auto max-w-4xl px-6 py-6">
-      <div className="mb-4 flex items-center justify-between">
-        <div>
-          <h2 className="font-heading text-[16px] font-medium tracking-tight text-text">
+    <div className="mx-auto max-w-4xl px-4 py-6 sm:px-6">
+      <div className="mb-4 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+        <div className="min-w-0">
+          <h2 className="truncate font-heading text-[16px] font-medium tracking-tight text-text">
             Goods receipt · {activePO.poNumber}
           </h2>
           <p className="mt-0.5 text-[12px] text-text-faint">Barcode-verified receipt matching</p>
         </div>
-        <div className="flex items-center gap-3">
+        <div className="flex flex-wrap items-center gap-3">
           <PoSwitcher
             openPOs={openPOs}
             activePoId={activePO.id}
@@ -232,7 +232,7 @@ export default function Receiving() {
         </div>
       </div>
 
-      <div className="grid grid-cols-[1fr_260px] gap-5">
+      <div className="grid grid-cols-1 gap-5 lg:grid-cols-[1fr_260px]">
         <div className="flex flex-col gap-4">
           <div className="surface-panel relative overflow-hidden rounded-lg border border-border bg-surface">
             <div className="relative flex aspect-video items-center justify-center overflow-hidden bg-overlay/[0.02]">
@@ -265,7 +265,7 @@ export default function Receiving() {
             </div>
 
             <div className="flex items-center justify-between border-t border-border px-4 py-3">
-              <div className="flex items-center gap-2">
+              <div className="flex flex-wrap items-center gap-2">
                 <input
                   ref={fileInputRef}
                   type="file"
@@ -363,7 +363,7 @@ export default function Receiving() {
                 </p>
               </div>
 
-              <div className="grid grid-cols-2 gap-x-4 gap-y-3 px-4 py-4 text-[12.5px]">
+              <div className="grid grid-cols-1 gap-x-4 gap-y-3 px-4 py-4 text-[12.5px] sm:grid-cols-2">
                 <div className="flex items-center gap-2">
                   <Hash className="h-3.5 w-3.5 shrink-0 text-text-faint" strokeWidth={1.75} />
                   <div>

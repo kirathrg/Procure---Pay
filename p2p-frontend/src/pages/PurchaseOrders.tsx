@@ -71,7 +71,7 @@ export default function PurchaseOrders() {
   });
 
   return (
-    <div className="mx-auto max-w-6xl px-6 py-6">
+    <div className="mx-auto max-w-6xl px-4 py-6 sm:px-6">
       <div className="mb-4 flex items-center justify-between">
         <div>
           <h2 className="font-heading text-[16px] font-medium tracking-tight text-text">Purchase orders</h2>
@@ -82,13 +82,13 @@ export default function PurchaseOrders() {
       </div>
 
       <div className="mb-4 flex flex-wrap items-center gap-2">
-        <div className="flex items-center gap-1.5 rounded-md border border-border bg-overlay/[0.03] px-2.5 py-1.5">
+        <div className="flex w-full items-center gap-1.5 rounded-md border border-border bg-overlay/[0.03] px-2.5 py-1.5 sm:w-auto">
           <Search className="h-3.5 w-3.5 text-text-faint" strokeWidth={1.75} />
           <input
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Search PO number or vendor…"
-            className="w-56 bg-transparent text-[12.5px] text-text placeholder:text-text-faint focus:outline-none"
+            className="w-full bg-transparent text-[12.5px] text-text placeholder:text-text-faint focus:outline-none sm:w-56"
           />
         </div>
         {statusOptions.map((s) => (
@@ -107,8 +107,8 @@ export default function PurchaseOrders() {
         ))}
       </div>
 
-      <div className="surface-panel overflow-hidden rounded-lg border border-border bg-surface">
-        <table className="w-full text-left">
+      <div className="surface-panel overflow-x-auto rounded-lg border border-border bg-surface">
+        <table className="w-full min-w-[920px] text-left">
           <thead>
             <tr className="text-[11px] text-text-faint">
               <th className="px-4 py-2.5 font-normal">PO Number</th>
@@ -207,7 +207,7 @@ export default function PurchaseOrders() {
                             transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
                             className="overflow-hidden border-t border-border bg-overlay/[0.015]"
                           >
-                            <div className="grid grid-cols-3 gap-6 px-4 py-4 text-[12px]">
+                            <div className="grid grid-cols-1 gap-6 px-4 py-4 text-[12px] sm:grid-cols-3">
                               <div>
                                 <p className="text-[10px] uppercase tracking-wide text-text-faint">Buyer</p>
                                 <p className="mt-1 text-text">{po.buyer.name}</p>

@@ -68,7 +68,7 @@ export default function Sourcing() {
 
   if (posLoading) {
     return (
-      <div className="mx-auto max-w-6xl px-6 py-6">
+      <div className="mx-auto max-w-6xl px-4 py-6 sm:px-6">
         <p className="text-[12px] text-text-faint">Loading…</p>
       </div>
     );
@@ -76,7 +76,7 @@ export default function Sourcing() {
 
   if (!po) {
     return (
-      <div className="mx-auto max-w-6xl px-6 py-6">
+      <div className="mx-auto max-w-6xl px-4 py-6 sm:px-6">
         <h2 className="font-heading text-[16px] font-medium tracking-tight text-text">Candidate suppliers</h2>
         <p className="mt-2 text-[13px] text-text-faint">
           No purchase order is currently active — submit a requisition to start a new cycle.
@@ -95,14 +95,14 @@ export default function Sourcing() {
   const candidates = candidateResult?.candidates ?? [];
 
   return (
-    <div className="mx-auto max-w-6xl px-6 py-6">
+    <div className="mx-auto max-w-6xl px-4 py-6 sm:px-6">
       <h2 className="font-heading text-[16px] font-medium tracking-tight text-text">Candidate suppliers</h2>
       <p className="mt-0.5 text-[12px] text-text-faint">
         {po.item} · Qty {po.quantity} · {po.poNumber}
       </p>
 
       {candidatesLoading && (
-        <div className="mt-4 grid grid-cols-3 gap-4">
+        <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {[0, 1, 2].map((i) => (
             <div key={i} className="h-40 animate-pulse rounded-lg border border-border bg-surface" />
           ))}
@@ -122,7 +122,7 @@ export default function Sourcing() {
       )}
 
       {candidates.length > 0 && (
-        <div className="mt-4 grid grid-cols-3 gap-4">
+        <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {candidates.map((s, i) => (
             <motion.div
               key={s.supplierId}
@@ -178,9 +178,9 @@ export default function Sourcing() {
       )}
 
       <div className="mt-8">
-        <div className="mb-3 flex items-center justify-between">
+        <div className="mb-3 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
           <h3 className="font-heading text-[14px] font-medium tracking-tight text-text">Purchase order</h3>
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2">
             <button
               onClick={() => handlePrint(po.id)}
               disabled={printing}
@@ -233,7 +233,7 @@ export default function Sourcing() {
 
         {/* Document surface — deliberately a real paper-white page, even in dark mode */}
         <div className="max-w-2xl overflow-hidden rounded-lg border border-black/10 bg-[#fcfcfa] text-[#1a1a18] shadow-[0_1px_2px_rgba(0,0,0,0.4)]">
-          <div className="flex items-start justify-between border-b border-black/10 px-8 pb-6 pt-8">
+          <div className="flex flex-col gap-4 border-b border-black/10 px-4 pb-6 pt-8 sm:flex-row sm:items-start sm:justify-between sm:px-8">
             <div>
               <div className="flex items-center gap-2">
                 <div className="flex h-6 w-6 items-center justify-center rounded-sm bg-accent text-white">
@@ -249,10 +249,10 @@ export default function Sourcing() {
                 billing@procurepay.example
               </p>
             </div>
-            <div className="text-right">
+            <div className="sm:text-right">
               <p className="font-heading text-[20px] font-semibold tracking-tight">Purchase Order</p>
               <p className="mt-1 font-tabular text-[13px] text-black/60">{po.poNumber}</p>
-              <div className="mt-2 flex items-center justify-end gap-1.5">
+              <div className="mt-2 flex items-center gap-1.5 sm:justify-end">
                 <span className="inline-block rounded-sm border border-accent/30 bg-accent/10 px-2 py-0.5 font-tabular text-[10px] font-medium uppercase tracking-wide text-accent">
                   Issued
                 </span>
@@ -270,7 +270,7 @@ export default function Sourcing() {
             </div>
           </div>
 
-          <div className="grid grid-cols-4 gap-4 border-b border-black/10 px-8 py-5 text-[12px]">
+          <div className="grid grid-cols-2 gap-4 border-b border-black/10 px-4 py-5 text-[12px] sm:grid-cols-4 sm:px-8">
             <div>
               <p className="text-[10px] uppercase tracking-wide text-black/40">Vendor</p>
               <p className="mt-1 font-medium">{vendor?.name ?? po.supplier}</p>
@@ -294,9 +294,9 @@ export default function Sourcing() {
           </div>
 
           {po.allocation && (
-            <div className="border-b border-black/10 px-8 py-5">
+            <div className="border-b border-black/10 px-4 py-5 sm:px-8">
               <p className="text-[10px] uppercase tracking-wide text-black/40">{PO_TYPE_LABEL[po.poType]} allocation</p>
-              <div className="mt-2 grid grid-cols-3 gap-4 text-[12px]">
+              <div className="mt-2 grid grid-cols-1 gap-4 text-[12px] sm:grid-cols-3">
                 <div>
                   <p className="text-black/50">Ceiling</p>
                   <p className="font-tabular font-medium">${po.allocation.ceiling.toLocaleString()}</p>
@@ -319,28 +319,30 @@ export default function Sourcing() {
             </div>
           )}
 
-          <div className="px-8 py-5">
-            <table className="w-full text-left text-[12px]">
-              <thead>
-                <tr className="border-b border-black/10 text-[10px] uppercase tracking-wide text-black/40">
-                  <th className="pb-2 font-normal">Description</th>
-                  <th className="pb-2 text-right font-normal">Qty</th>
-                  <th className="pb-2 text-right font-normal">Unit price</th>
-                  <th className="pb-2 text-right font-normal">Amount</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr className="border-b border-black/5">
-                  <td className="py-3">{po.item}</td>
-                  <td className="py-3 text-right font-tabular">{po.quantity}</td>
-                  <td className="py-3 text-right font-tabular">${po.unitPrice.toFixed(2)}</td>
-                  <td className="py-3 text-right font-tabular">${subtotal.toLocaleString()}.00</td>
-                </tr>
-              </tbody>
-            </table>
+          <div className="px-4 py-5 sm:px-8">
+            <div className="overflow-x-auto">
+              <table className="w-full min-w-[380px] text-left text-[12px]">
+                <thead>
+                  <tr className="border-b border-black/10 text-[10px] uppercase tracking-wide text-black/40">
+                    <th className="pb-2 font-normal">Description</th>
+                    <th className="pb-2 text-right font-normal">Qty</th>
+                    <th className="pb-2 text-right font-normal">Unit price</th>
+                    <th className="pb-2 text-right font-normal">Amount</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr className="border-b border-black/5">
+                    <td className="py-3">{po.item}</td>
+                    <td className="py-3 text-right font-tabular">{po.quantity}</td>
+                    <td className="py-3 text-right font-tabular">${po.unitPrice.toFixed(2)}</td>
+                    <td className="py-3 text-right font-tabular">${subtotal.toLocaleString()}.00</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
 
             <div className="mt-2 flex justify-end">
-              <div className="w-56 space-y-1.5 text-[12px]">
+              <div className="w-full space-y-1.5 text-[12px] sm:w-56">
                 <div className="flex justify-between text-black/60">
                   <span>Subtotal</span>
                   <span className="font-tabular">${subtotal.toLocaleString()}.00</span>
@@ -357,7 +359,7 @@ export default function Sourcing() {
             </div>
           </div>
 
-          <div className="border-t border-black/10 bg-black/[0.02] px-8 py-4">
+          <div className="border-t border-black/10 bg-black/[0.02] px-4 py-4 sm:px-8">
             <ExplainNote className="text-black/50">
               Auto-generated from requisition · approved without manual line-item entry
             </ExplainNote>

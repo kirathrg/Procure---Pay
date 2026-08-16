@@ -16,7 +16,7 @@ export default function MatchApproval() {
 
   if (isLoading) {
     return (
-      <div className="mx-auto max-w-6xl px-6 py-6">
+      <div className="mx-auto max-w-6xl px-4 py-6 sm:px-6">
         <p className="text-[13px] text-text-faint">Loading match cases…</p>
       </div>
     );
@@ -24,7 +24,7 @@ export default function MatchApproval() {
 
   if (!active) {
     return (
-      <div className="mx-auto max-w-6xl px-6 py-6">
+      <div className="mx-auto max-w-6xl px-4 py-6 sm:px-6">
         <h2 className="font-heading text-[16px] font-medium tracking-tight text-text">3-Way Match</h2>
         <p className="mt-2 text-[13px] text-text-faint">
           No match cases yet — run a match from a purchase order once it has a receipt or invoice.
@@ -36,14 +36,14 @@ export default function MatchApproval() {
   const status = active.resolvedStatus;
 
   return (
-    <div className="mx-auto max-w-6xl px-6 py-6">
-      <div className="mb-4 flex items-center gap-2">
+    <div className="mx-auto max-w-6xl px-4 py-6 sm:px-6">
+      <div className="mb-4 flex items-center gap-2 overflow-x-auto">
         {matchCases.map((c) => (
           <button
             key={c.id}
             onClick={() => setActiveId(c.id)}
             className={cn(
-              "relative rounded-md border px-3 py-1.5 font-tabular text-[12px] transition-colors duration-150 ease-out",
+              "relative shrink-0 rounded-md border px-3 py-1.5 font-tabular text-[12px] transition-colors duration-150 ease-out",
               c.id === active.id
                 ? "border-border-strong text-text"
                 : "border-border text-text-faint hover:border-border-strong hover:text-text-dim",
@@ -61,19 +61,19 @@ export default function MatchApproval() {
         ))}
       </div>
 
-      <div className="mb-5 flex items-center justify-between">
-        <div>
-          <h2 className="font-heading text-[16px] font-medium tracking-tight text-text">
+      <div className="mb-5 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+        <div className="min-w-0">
+          <h2 className="truncate font-heading text-[16px] font-medium tracking-tight text-text">
             {active.poNumber} — {active.vendor}
           </h2>
           <p className="mt-0.5 text-[12px] text-text-faint">Three-way match: purchase order, receipt, invoice</p>
         </div>
-        <Badge tone={active.outcome === "auto-approved" ? "success" : "warning"} pulseKey={active.id}>
+        <Badge tone={active.outcome === "auto-approved" ? "success" : "warning"} pulseKey={active.id} className="shrink-0">
           {active.outcome === "auto-approved" ? "Auto-match eligible" : "Exception detected"}
         </Badge>
       </div>
 
-      <div className="flex gap-0">
+      <div className="flex flex-col gap-3 lg:flex-row lg:gap-0">
         <MatchColumn title="Purchase Order" subtitle={active.poNumber} fields={active.fields} valueKey="poValue" />
         <MatchIndicatorRail fields={active.fields} />
         <MatchColumn title="Receipt" subtitle="Goods receipt scan" fields={active.fields} valueKey="receiptValue" />

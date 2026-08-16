@@ -76,17 +76,17 @@ export default function EmployeePR() {
 
   return (
     <div className="min-h-screen bg-canvas">
-      <div className="flex items-center justify-between border-b border-border bg-surface px-6 py-3.5">
-        <div className="flex items-center gap-2">
-          <div className="flex h-6 w-6 items-center justify-center rounded-sm bg-primary text-white">
+      <div className="flex flex-wrap items-center justify-between gap-2 border-b border-border bg-surface px-4 py-3.5 sm:px-6">
+        <div className="flex min-w-0 items-center gap-2">
+          <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-sm bg-primary text-white">
             <Workflow className="h-3.5 w-3.5" strokeWidth={2.25} />
           </div>
-          <span className="font-heading text-[14px] font-bold tracking-tight text-text">
+          <span className="truncate font-heading text-[14px] font-bold tracking-tight text-text">
             Warehouse Requests
           </span>
         </div>
-        <div className="flex items-center gap-3">
-          {user && <span className="text-[12px] text-text-faint">{user.name}</span>}
+        <div className="flex shrink-0 items-center gap-3">
+          {user && <span className="hidden text-[12px] text-text-faint sm:inline">{user.name}</span>}
           <button
             onClick={handleLogout}
             className="flex items-center gap-1.5 rounded-md border border-border px-2.5 py-1.5 text-[12px] text-text-dim transition-colors duration-150 ease-out hover:border-border-strong hover:text-text"
@@ -97,7 +97,7 @@ export default function EmployeePR() {
         </div>
       </div>
 
-      <div className="mx-auto max-w-3xl px-6 py-8">
+      <div className="mx-auto max-w-3xl px-4 py-8 sm:px-6">
         <section className="surface-panel rounded-lg border border-border bg-surface p-5">
           <div className="mb-4 flex items-center gap-2">
             <PackagePlus className="h-4 w-4 text-accent" strokeWidth={1.75} />
@@ -105,8 +105,8 @@ export default function EmployeePR() {
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-3.5">
-            <div className="grid grid-cols-2 gap-3.5">
-              <div className="col-span-2">
+            <div className="grid grid-cols-1 gap-3.5 sm:grid-cols-2">
+              <div className="sm:col-span-2">
                 <label className="mb-1.5 block text-[12px] text-text-faint">Item</label>
                 <input
                   value={item}
@@ -143,7 +143,7 @@ export default function EmployeePR() {
                 />
               </div>
 
-              <div className="col-span-2">
+              <div className="sm:col-span-2">
                 <label className="mb-1.5 block text-[12px] text-text-faint">Urgency</label>
                 <div className="flex gap-2">
                   {(["low", "normal", "urgent"] as Urgency[]).map((u) => (
@@ -164,7 +164,7 @@ export default function EmployeePR() {
                 </div>
               </div>
 
-              <div className="col-span-2">
+              <div className="sm:col-span-2">
                 <label className="mb-1.5 block text-[12px] text-text-faint">Notes (optional)</label>
                 <textarea
                   value={notes}
@@ -231,20 +231,20 @@ export default function EmployeePR() {
                 return (
                   <div
                     key={pr.id}
-                    className="flex items-center justify-between gap-3 rounded-lg border border-border bg-surface px-4 py-3"
+                    className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-border bg-surface px-4 py-3"
                   >
                     <div className="min-w-0">
-                      <div className="flex items-center gap-2">
+                      <div className="flex flex-wrap items-center gap-2">
                         <span className="text-[13px] font-medium text-text">{pr.item}</span>
                         <span className="font-tabular text-[12px] text-text-faint">× {pr.quantity}</span>
                       </div>
-                      <p className="mt-0.5 text-[11px] text-text-faint">
+                      <p className="mt-0.5 break-words text-[11px] text-text-faint">
                         {pr.deadline ? `Needed ${pr.deadline} · ` : ""}
                         {pr.urgency} urgency
                         {pr.poNumber ? ` · ${pr.poNumber}` : ""}
                       </p>
                     </div>
-                    <Badge tone={statusTone[pr.status]}>
+                    <Badge tone={statusTone[pr.status]} className="shrink-0">
                       <Icon className="h-3 w-3" strokeWidth={2} />
                       {statusLabel[pr.status]}
                     </Badge>

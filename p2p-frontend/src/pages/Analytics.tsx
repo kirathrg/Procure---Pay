@@ -48,32 +48,32 @@ export default function Analytics() {
   };
 
   return (
-    <div className="mx-auto max-w-6xl px-6 py-6">
+    <div className="mx-auto max-w-6xl px-4 py-6 sm:px-6">
       {/* KPI strip */}
-      <div className="grid grid-cols-4 gap-3">
+      <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
         {metrics.map((m, i) => (
           <motion.div
             key={m.label}
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3, delay: i * 0.06, ease: [0.16, 1, 0.3, 1] }}
-            className="surface-panel card-interactive overflow-hidden rounded-lg border border-border bg-surface px-4 py-3.5"
+            className="surface-panel card-interactive overflow-hidden rounded-lg border border-border bg-surface px-3 py-3 sm:px-4 sm:py-3.5"
           >
-            <p className="relative text-[11px] text-text-faint">{m.label}</p>
-            <p className="relative mt-1.5 font-heading text-[24px] font-medium leading-none tracking-tight text-text">
+            <p className="relative truncate text-[11px] text-text-faint">{m.label}</p>
+            <p className="relative mt-1.5 truncate font-heading text-[19px] font-medium leading-none tracking-tight text-text sm:text-[24px]">
               <CountUp value={m.value} prefix={m.prefix} suffix={m.suffix} decimals={m.decimals} />
             </p>
           </motion.div>
         ))}
       </div>
 
-      <div className="mt-4 grid grid-cols-3 gap-4">
+      <div className="mt-4 grid grid-cols-1 gap-4 lg:grid-cols-3">
         {/* Trend */}
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.35, delay: 0.24, ease: [0.16, 1, 0.3, 1] }}
-          className="surface-panel col-span-2 rounded-lg border border-border bg-surface p-4"
+          className="surface-panel rounded-lg border border-border bg-surface p-4 lg:col-span-2"
         >
           <div className="relative mb-1 flex items-baseline justify-between">
             <p className="text-[12px] text-text-faint">Cycle time trend</p>
@@ -182,50 +182,52 @@ export default function Analytics() {
         <div className="relative border-b border-border px-4 py-3">
           <p className="text-[12px] text-text-faint">Supplier performance</p>
         </div>
-        <table className="relative w-full text-left">
-          <thead>
-            <tr className="text-[11px] text-text-faint">
-              <th className="w-8 px-4 py-2 font-normal">#</th>
-              <th className="px-4 py-2 font-normal">Supplier</th>
-              <th className="px-4 py-2 font-normal">Orders</th>
-              <th className="px-4 py-2 font-normal">On-time rate</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-border">
-            {[...supplierPerformance]
-              .sort((a, b) => b.onTimeRate - a.onTimeRate)
-              .map((s, i) => (
-                <tr key={s.name} className="row-interactive text-[13px]">
-                  <td className="px-4 py-2.5 font-tabular text-text-faint">{i + 1}</td>
-                  <td className="px-4 py-2.5 text-text">{s.name}</td>
-                  <td className="px-4 py-2.5 font-tabular text-text-dim">{s.orders}</td>
-                  <td className="px-4 py-2.5">
-                    <div className="flex items-center gap-2">
-                      <div className="h-1 w-16 overflow-hidden rounded-full bg-overlay/[0.08]">
-                        <motion.div
-                          initial={{ width: 0 }}
-                          animate={{ width: `${s.onTimeRate}%` }}
-                          transition={{ duration: 0.7, delay: 0.4 + i * 0.06, ease: [0.16, 1, 0.3, 1] }}
+        <div className="overflow-x-auto">
+          <table className="relative w-full min-w-[420px] text-left">
+            <thead>
+              <tr className="text-[11px] text-text-faint">
+                <th className="w-8 px-4 py-2 font-normal">#</th>
+                <th className="px-4 py-2 font-normal">Supplier</th>
+                <th className="px-4 py-2 font-normal">Orders</th>
+                <th className="px-4 py-2 font-normal">On-time rate</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-border">
+              {[...supplierPerformance]
+                .sort((a, b) => b.onTimeRate - a.onTimeRate)
+                .map((s, i) => (
+                  <tr key={s.name} className="row-interactive text-[13px]">
+                    <td className="px-4 py-2.5 font-tabular text-text-faint">{i + 1}</td>
+                    <td className="px-4 py-2.5 text-text">{s.name}</td>
+                    <td className="px-4 py-2.5 font-tabular text-text-dim">{s.orders}</td>
+                    <td className="px-4 py-2.5">
+                      <div className="flex items-center gap-2">
+                        <div className="h-1 w-16 overflow-hidden rounded-full bg-overlay/[0.08]">
+                          <motion.div
+                            initial={{ width: 0 }}
+                            animate={{ width: `${s.onTimeRate}%` }}
+                            transition={{ duration: 0.7, delay: 0.4 + i * 0.06, ease: [0.16, 1, 0.3, 1] }}
+                            className={cn(
+                              "h-full rounded-full",
+                              s.onTimeRate >= 90 ? "bg-success" : s.onTimeRate >= 80 ? "bg-warning" : "bg-danger",
+                            )}
+                          />
+                        </div>
+                        <span
                           className={cn(
-                            "h-full rounded-full",
-                            s.onTimeRate >= 90 ? "bg-success" : s.onTimeRate >= 80 ? "bg-warning" : "bg-danger",
+                            "font-tabular",
+                            s.onTimeRate >= 90 ? "text-success" : s.onTimeRate >= 80 ? "text-warning" : "text-danger",
                           )}
-                        />
+                        >
+                          {s.onTimeRate}%
+                        </span>
                       </div>
-                      <span
-                        className={cn(
-                          "font-tabular",
-                          s.onTimeRate >= 90 ? "text-success" : s.onTimeRate >= 80 ? "text-warning" : "text-danger",
-                        )}
-                      >
-                        {s.onTimeRate}%
-                      </span>
-                    </div>
-                  </td>
-                </tr>
-              ))}
-          </tbody>
-        </table>
+                    </td>
+                  </tr>
+                ))}
+            </tbody>
+          </table>
+        </div>
       </motion.div>
     </div>
   );

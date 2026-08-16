@@ -46,9 +46,9 @@ function PaymentRow({ payment }: { payment: Payment }) {
 
   return (
     <div className="rounded-lg border border-border bg-surface p-4">
-      <div className="flex items-center justify-between gap-4">
-        <div>
-          <div className="flex items-center gap-2">
+      <div className="flex flex-wrap items-start justify-between gap-3">
+        <div className="min-w-0">
+          <div className="flex flex-wrap items-center gap-2">
             <span className="font-tabular text-[13px] font-medium text-text">{payment.poNumber}</span>
             <Badge tone={isMismatch ? "warning" : "success"}>
               {isMismatch ? "Mismatch — needs review" : "Auto-matched"}
@@ -56,7 +56,7 @@ function PaymentRow({ payment }: { payment: Payment }) {
           </div>
           <p className="mt-0.5 text-[12px] text-text-faint">{payment.vendor}</p>
         </div>
-        <div className="text-right">
+        <div className="shrink-0 text-right">
           <p className="font-tabular text-[15px] font-medium text-text">${payment.amount.toLocaleString()}</p>
         </div>
       </div>
@@ -98,23 +98,25 @@ export default function ManagerDashboard() {
 
   return (
     <div className="min-h-screen bg-canvas">
-      <div className="flex items-center justify-between border-b border-border bg-surface px-6 py-3.5">
-        <div className="flex items-center gap-2">
-          <div className="flex h-6 w-6 items-center justify-center rounded-sm bg-primary text-white">
+      <div className="flex items-center justify-between border-b border-border bg-surface px-4 py-3.5 sm:px-6">
+        <div className="flex min-w-0 items-center gap-2">
+          <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-sm bg-primary text-white">
             <ShieldCheck className="h-3.5 w-3.5" strokeWidth={2.25} />
           </div>
-          <span className="font-heading text-[14px] font-bold tracking-tight text-text">Manager Approvals</span>
+          <span className="truncate font-heading text-[14px] font-bold tracking-tight text-text">
+            Manager Approvals
+          </span>
         </div>
         <button
           onClick={handleLogout}
-          className="flex items-center gap-1.5 rounded-md border border-border px-2.5 py-1.5 text-[12px] text-text-dim transition-colors duration-150 ease-out hover:border-border-strong hover:text-text"
+          className="flex shrink-0 items-center gap-1.5 rounded-md border border-border px-2.5 py-1.5 text-[12px] text-text-dim transition-colors duration-150 ease-out hover:border-border-strong hover:text-text"
         >
           <LogOut className="h-3.5 w-3.5" strokeWidth={1.75} />
           Sign out
         </button>
       </div>
 
-      <div className="mx-auto max-w-4xl px-6 py-8">
+      <div className="mx-auto max-w-4xl px-4 py-8 sm:px-6">
         {isLoading ? (
           <p className="text-[13px] text-text-faint">Loading…</p>
         ) : (
@@ -150,8 +152,8 @@ export default function ManagerDashboard() {
 
             <section className="mt-10">
               <h2 className="font-heading text-[15px] font-medium tracking-tight text-text">Released payments</h2>
-              <div className="mt-3 overflow-hidden rounded-lg border border-border bg-surface">
-                <table className="w-full text-left">
+              <div className="mt-3 overflow-x-auto rounded-lg border border-border bg-surface">
+                <table className="w-full min-w-[640px] text-left">
                   <thead>
                     <tr className="text-[11px] text-text-faint">
                       <th className="px-4 py-2.5 font-normal">PO Number</th>

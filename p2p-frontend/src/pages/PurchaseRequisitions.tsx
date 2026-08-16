@@ -33,7 +33,7 @@ export default function PurchaseRequisitions() {
   const pendingCount = prs.filter((pr) => pr.status === "pending").length;
 
   return (
-    <div className="mx-auto max-w-6xl px-6 py-6">
+    <div className="mx-auto max-w-6xl px-4 py-6 sm:px-6">
       <div className="mb-4 flex items-center justify-between">
         <div>
           <h2 className="font-heading text-[16px] font-medium tracking-tight text-text">Purchase requisitions</h2>
@@ -62,8 +62,8 @@ export default function PurchaseRequisitions() {
         ))}
       </div>
 
-      <div className="surface-panel overflow-hidden rounded-lg border border-border bg-surface">
-        <table className="w-full text-left">
+      <div className="surface-panel overflow-x-auto rounded-lg border border-border bg-surface">
+        <table className="w-full min-w-[760px] text-left">
           <thead>
             <tr className="text-[11px] text-text-faint">
               <th className="px-4 py-2.5 font-normal">Item</th>
