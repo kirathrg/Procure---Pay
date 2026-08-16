@@ -530,13 +530,18 @@ function PoSwitcher({
                   po.id === activePoId && "bg-overlay/[0.04]",
                 )}
               >
-                <div className="min-w-0">
+                <div className="min-w-0 flex-1">
                   <p className="text-[12.5px] font-medium text-text">{po.poNumber}</p>
                   <p className="truncate text-[11px] text-text-faint">
                     {po.item} · {po.supplier}
                   </p>
                 </div>
-                {po.id === activePoId && <Check className="mt-0.5 h-3 w-3 shrink-0 text-accent" strokeWidth={2} />}
+                <div className="flex shrink-0 items-center gap-1.5">
+                  <Badge tone={po.receivingStatus === "received" ? "success" : "warning"}>
+                    {po.receivingStatus === "received" ? "Completed" : "Pending"}
+                  </Badge>
+                  {po.id === activePoId && <Check className="h-3 w-3 shrink-0 text-accent" strokeWidth={2} />}
+                </div>
               </DropdownMenu.Item>
             ))
           )}
