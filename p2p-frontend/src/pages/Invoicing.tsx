@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useSearchParams } from "react-router-dom";
-import { Camera, FileText } from "lucide-react";
+import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
+import { Camera, FileText, Check, ChevronDown } from "lucide-react";
 import { useActivePurchaseOrder, usePurchaseOrders } from "../hooks/usePurchaseOrders";
 import { useInvoices, useExtractInvoice } from "../hooks/useInvoicing";
 import { Badge } from "../components/ui/Badge";
@@ -51,11 +52,15 @@ export default function Invoicing() {
   }, [serverActivePO, lockedActivePoId]);
 
   // Priority: an explicit ?po= (e.g. clicked from the Purchase Orders table)
-  // > the frozen active PO > a PO the user picked from the fallback
-  // dropdown below. Never a dead end just because nothing is "active" —
-  // there's almost always a real PO still waiting on an invoice.
+  // > a PO the user explicitly picked from the switcher > the frozen active
+  // PO as a default. manualPoId outranks lockedActivePoId (not the reverse,
+  // as it was before) specifically so "Switch PO" actually works —
+  // otherwise the locked active PO always won and picking a different one
+  // from the switcher had no visible effect. Never a dead end just because
+  // nothing is "active" — there's almost always a real PO still waiting on
+  // an invoice.
   const openPOs = allPOs.filter((po) => OPEN_STATUSES.has(po.status));
-  const selectedPoId = requestedPoId ?? lockedActivePoId ?? manualPoId;
+  const selectedPoId = requestedPoId ?? manualPoId ?? lockedActivePoId;
   const activePO =
     selectedPoId && selectedPoId === serverActivePO?.id
       ? serverActivePO
@@ -170,23 +175,29 @@ export default function Invoicing() {
             {invoice ? `${invoice.vendor} · Ref ${invoice.poNumber}` : "Upload an invoice to extract fields"}
           </p>
         </div>
-        {!requestedPoId && !lockedActivePoId && manualPoId && (
-          <button
-            onClick={() => pickManualPo(null)}
-            className="mr-2 text-[11.5px] text-text-faint underline decoration-border underline-offset-2 transition-colors duration-150 ease-out hover:text-text-dim"
-          >
-            Change PO
-          </button>
-        )}
-        {fields.length > 0 && (
-          <Badge
-            tone={revealCount === fields.length ? "success" : "info"}
-            pulseKey={revealCount === fields.length ? "done" : "extracting"}
-          >
-            {revealCount === fields.length ? "Extraction complete" : "Extracting fields…"}
-          </Badge>
-        )}
-        {extractInvoice.isPending && <Badge tone="info">Reading document…</Badge>}
+        <div className="flex items-center gap-3">
+          <PoSwitcher
+            openPOs={openPOs}
+            activePoId={activePO.id}
+            onPick={(id) => {
+              pickManualPo(id);
+              setSelectedFile(null);
+              setPreviewUrl(null);
+              setActiveIndex(-1);
+              setConfirmedCount(0);
+              extractInvoice.reset();
+            }}
+          />
+          {fields.length > 0 && (
+            <Badge
+              tone={revealCount === fields.length ? "success" : "info"}
+              pulseKey={revealCount === fields.length ? "done" : "extracting"}
+            >
+              {revealCount === fields.length ? "Extraction complete" : "Extracting fields…"}
+            </Badge>
+          )}
+          {extractInvoice.isPending && <Badge tone="info">Reading document…</Badge>}
+        </div>
       </div>
 
       {extractInvoice.isError && (
@@ -346,5 +357,60 @@ export default function Invoicing() {
         </div>
       )}
     </div>
+  );
+}
+
+/** Always-available "switch to a different open PO" control — lets a user
+ * move off whatever PO happened to be selected (their server-tracked active
+ * PO, a ?po= link, or a prior manual pick) to work through Invoicing on any
+ * other open PO instead, without being stuck on just one. */
+function PoSwitcher({
+  openPOs,
+  activePoId,
+  onPick,
+}: {
+  openPOs: { id: string; poNumber: string; item: string; supplier: string; invoiceStatus: string }[];
+  activePoId: string;
+  onPick: (id: string) => void;
+}) {
+  return (
+    <DropdownMenu.Root>
+      <DropdownMenu.Trigger asChild>
+        <button className="flex items-center gap-1.5 rounded-md border border-border px-2.5 py-1.5 text-[11.5px] font-medium text-text-dim transition-colors duration-150 ease-out hover:border-border-strong hover:text-text">
+          Switch PO
+          <ChevronDown className="h-3 w-3" strokeWidth={2} />
+        </button>
+      </DropdownMenu.Trigger>
+      <DropdownMenu.Portal>
+        <DropdownMenu.Content
+          align="end"
+          sideOffset={6}
+          className="surface-panel z-50 max-h-80 w-72 overflow-y-auto rounded-md border border-border-strong bg-surface-raised p-1 shadow-[0_8px_30px_rgba(0,0,0,0.4)]"
+        >
+          {openPOs.length === 0 ? (
+            <p className="px-2.5 py-3 text-[12px] text-text-faint">No other open purchase orders.</p>
+          ) : (
+            openPOs.map((po) => (
+              <DropdownMenu.Item
+                key={po.id}
+                onSelect={() => onPick(po.id)}
+                className={cn(
+                  "flex cursor-pointer items-start justify-between gap-2 rounded-sm px-2.5 py-2 text-left outline-none transition-colors duration-100 data-[highlighted]:bg-overlay/[0.06]",
+                  po.id === activePoId && "bg-overlay/[0.04]",
+                )}
+              >
+                <div className="min-w-0">
+                  <p className="text-[12.5px] font-medium text-text">{po.poNumber}</p>
+                  <p className="truncate text-[11px] text-text-faint">
+                    {po.item} · {po.supplier}
+                  </p>
+                </div>
+                {po.id === activePoId && <Check className="mt-0.5 h-3 w-3 shrink-0 text-accent" strokeWidth={2} />}
+              </DropdownMenu.Item>
+            ))
+          )}
+        </DropdownMenu.Content>
+      </DropdownMenu.Portal>
+    </DropdownMenu.Root>
   );
 }
