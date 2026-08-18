@@ -22,8 +22,8 @@ class Settings(BaseSettings):
     # a handful of short, human-paced calls per requisition/match/anomaly,
     # never bulk or scheduled.
     groq_api_key: str = ""
-    gemini_chat_model: str = "llama-3.1-8b-instant"
-    gemini_narrative_model: str = "llama-3.1-8b-instant"
+    gemini_chat_model: str = "openai/gpt-oss-20b"
+    gemini_narrative_model: str = "openai/gpt-oss-20b"
 
     # Storage buckets
     receipts_bucket: str = "receipts"
